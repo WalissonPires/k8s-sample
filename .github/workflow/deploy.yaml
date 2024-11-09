@@ -1,0 +1,51 @@
+name: deploy
+
+on:
+  push:
+    branches: ["production"]
+  workflow_dispatch:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Docker Hub Login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Docker image build/push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./webapp
+          push: true
+          file: ./webapp/Dockerfile
+          tags: |
+            wprmdev/k8s-webapp:latest
+            wprmdev/k8s-webapp:v${{ github.run_number }}
+
+  cd:
+    runs-on: ubuntu-latest
+    needs: [ci]
+    permissions:
+      id-token: write
+      contents: read
+      actions: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Config kubectl
+        run: echo ${{ secrets.KUBECONFIG }} >> $HOME/.kube/config
+
+      - name: Deploy K8s
+        uses: Azure/k8s-deploy@v5
+        with:
+           manifests: |
+              ./k8s/deployment.yaml
+           images: |
+              wrpmdev/k8s-webapp:v${{ github.run_number }}
