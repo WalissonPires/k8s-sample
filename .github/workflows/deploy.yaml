@@ -42,7 +42,7 @@ jobs:
       - name: Config kubectl
         env:
           KUBECONFIG: ${{ secrets.KUBECONFIG }}
-        run: echo "$KUBECONFIG" >> $HOME/.kube/config
+        run: mkdir $HOME/.kube && echo "$KUBECONFIG" >> $HOME/.kube/config
 
       - name: Deploy K8s
         uses: Azure/k8s-deploy@v5
