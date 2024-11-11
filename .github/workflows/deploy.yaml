@@ -41,13 +41,15 @@ jobs:
 
       - name: Config kubectl
         env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG }}
-        run: mkdir $HOME/.kube && echo "$KUBECONFIG" >> $HOME/.kube/config
+          KUBECONFIG_CONTENT: ${{ secrets.KUBECONFIG }}
+        run: mkdir $HOME/.kube && echo "$KUBECONFIG_CONTENT" >> $HOME/.kube/config
 
       - name: Deploy K8s
         uses: Azure/k8s-deploy@v5
         with:
-           manifests: |
-              ./k8s/deployment.yaml
-           images: |
-              wrpmdev/k8s-webapp:v${{ github.run_number }}
+          namespace: k8s-sample
+          manifests: |
+            ./k8s/deployment.yaml
+          images: |
+            wrpmdev/k8s-webapp:v${{ github.run_number }}
+          skip-tls-verify: true
