@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: webapp
-          image: wprmdev/k8s-webapp:latest
+          image: wprmdev/k8s-webapp
           ports:
             - containerPort: 3000
           resources:
