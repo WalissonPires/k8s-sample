@@ -6,6 +6,6 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     <a href="https://vite.dev" target="_blank">
       <img src="${viteLogo}" class="logo" alt="Vite logo" />
     </a>
-    <h1>K8s Sample v1</h1>
+    <h1>Website Sample v1</h1>
   </div>
 `;
