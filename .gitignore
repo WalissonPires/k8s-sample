@@ -1,2 +1,5 @@
 /webapp/dist
 /webapp/node_modules
+/webapp/bin
+/webapp/obj
+/webapp2

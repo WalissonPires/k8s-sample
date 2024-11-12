@@ -1,4 +1,4 @@
-## Build docker image
+## Docker commands
 
 ```sh
 cd webapp
@@ -14,11 +14,19 @@ docker tag k8s-webapp wprmdev/k8s-webapp
 docker push wprmdev/k8s-webapp
 ```
 
-## K8s deploy
+## K8s commands
 
 ```sh
 kubectl apply -f ./k8s/namespace.yaml
 kubectl apply -f ./k8s/deployment.yaml
 kubectl delete -f ./k8s/namespace.yaml
 watch 'kubectl get pods'
+
+kubectl --insecure-skip-tls-verify get pods
+```
+
+## App
+
+```
+url: https://k8s-webapp.hwcloud.com.br
 ```

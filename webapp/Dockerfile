@@ -1,17 +1,18 @@
-# Do not use in production
+# https://hub.docker.com/_/microsoft-dotnet
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /source
 
-FROM node:23-alpine
+# copy csproj and restore as distinct layers
+COPY webapp.csproj .
+RUN dotnet restore
 
-WORKDIR /app
-
-COPY package.json package-lock.json .
-
-RUN npm install
-
+# copy everything else and build app
 COPY . .
+RUN dotnet publish -c release -o /app --no-restore
 
-RUN npm run build
-
-EXPOSE 3000
-
-CMD [ "npm", "run", "dev" ]
+# final stage/image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+COPY --from=build /app ./
+ENV DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE false
+ENTRYPOINT ["dotnet", "webapp.dll"]

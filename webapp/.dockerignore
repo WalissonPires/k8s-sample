@@ -1,3 +1,4 @@
-/dist
-/node_modules
+/bin
+/obj
 Dockerfile
+appsettings.Development.json
